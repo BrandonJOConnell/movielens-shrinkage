@@ -58,3 +58,6 @@ con.sql("""
         MAX(rated_at) AS last_rating
     FROM ratings
 """).show()
+
+#%% 
+con.close() # ensures other scripts can connect to DuckDB 

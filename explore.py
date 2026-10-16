@@ -44,4 +44,5 @@ con.sql("""
     LIMIT 10
 """).show()
 
-# %%
+#%% 
+con.close() # ensures other scripts can connect to DuckDB 
