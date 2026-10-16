@@ -11,6 +11,7 @@ wheels/
 
 # DuckDB 
 *.duckdb
+*.duckdb.wal
 
-# Data
+# Data (licence forbids redistribution; also too large)
 data/
