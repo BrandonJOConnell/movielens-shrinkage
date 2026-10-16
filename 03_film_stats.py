@@ -20,3 +20,4 @@ con.sql("""
     WHERE n > 1
 """).show()
 # %%
+con.close()
