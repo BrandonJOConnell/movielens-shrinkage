@@ -1,7 +1,7 @@
 [project]
 name = "movielens-shrinkage"
 version = "0.1.0"
-description = "Add your description here"
+description = "Empirical-Bayes shrinkage of film ratings on MovieLens 32M, with DuckDB"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
