@@ -1,5 +1,11 @@
 #%% Ingest Data: load raw MovieLens CSVs into DuckDB
 import duckdb
+from pathlib import Path
+
+for name in ["ratings.csv", "movies.csv"]:
+    path = Path("data/ml-32m") / name
+    if not path.exists():
+        raise SystemExit(f"{path} not found. See 'Reproduce' in the README for the download step.")
 
 # Spin up DuckDB file on disk
 con = duckdb.connect("movielens.duckdb") 
