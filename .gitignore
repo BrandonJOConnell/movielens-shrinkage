@@ -15,3 +15,6 @@ wheels/
 
 # Data (licence forbids redistribution; also too large)
 data/
+
+*.parquet
+.ipynb_checkpoints/
