@@ -71,4 +71,43 @@ print(df.nlargest(15, "shrunk")[cols])         # shrunk top 15
 df.sort_values(["mean_rating", "n"], ascending=False).head(15)[cols]
 print((df.mean_rating == 5).sum())
 
-# %%
+#%% Plotting: 
+import matplotlib.pyplot as plt
+
+# view original raw ratings and how they compare to the mean and variance approximation
+d = df.sort_values("n")
+half = 1.96 * np.sqrt(tau2_all + d.noise)
+
+fig, ax = plt.subplots(figsize=(8, 5))
+ax.scatter(df.n, df.mean_rating, s=3, alpha=0.15, color="#2563eb", linewidths=0)
+ax.plot(d.n, mu_all + half, color="0.4", lw=1.5)
+ax.plot(d.n, mu_all - half, color="0.4", lw=1.5)
+ax.axhline(mu_all, color="0.4", lw=1, ls="--")
+ax.set_xscale("log")
+ax.set_xlabel("Number of ratings (log scale)")
+ax.set_ylabel("Mean rating")
+ax.set_title("Few ratings, wild averages")
+ax.grid(alpha=0.2)
+for side in ("top", "right"):
+    ax.spines[side].set_visible(False)
+fig.savefig("figures/funnel_raw.png", dpi=300, bbox_inches="tight")
+
+# plot side by side of the raw ratings and post-shrinkage ratings
+fig, axes = plt.subplots(1, 2, figsize=(12, 5), sharey=True)
+
+for ax, col, title in zip(axes, ["mean_rating", "shrunk"],
+                          ["Raw average", "After shrinkage"]):
+    ax.scatter(df.n, df[col], s=3, alpha=0.15, color="#2563eb", linewidths=0)
+    ax.axhline(mu_all, color="0.4", lw=1, ls="--")
+    ax.set_xscale("log")
+    ax.set_title(title)
+    ax.set_xlabel("Number of ratings (log scale)")
+    ax.grid(alpha=0.2)
+    for side in ("top", "right"):
+        ax.spines[side].set_visible(False)
+
+axes[0].set_ylabel("Rating")
+plt.tight_layout()
+fig.savefig("figures/funnel_raw_vs_shrunk.png", dpi=300, bbox_inches="tight")
+
+
