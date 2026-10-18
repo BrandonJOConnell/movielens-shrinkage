@@ -67,6 +67,23 @@ cols = ["movie_id", "title", "n", "mean_rating", "shrunk"]
 print(df.nlargest(15, "mean_rating")[cols])    # raw top 15
 print(df.nlargest(15, "shrunk")[cols])         # shrunk top 15
 
+# Each film’s rank by raw average
+df["raw_rank"] = df["mean_rating"].rank(ascending=False, method="min").astype(int)
+df["shrunk_rank"] = df["shrunk"].rank(ascending=False, method="min").astype(int)
+# NB: All films with a raw mean of 5.0 are tied for rank 1.
+
+#%% save the headline tables for the README
+from pathlib import Path
+Path("results").mkdir(exist_ok=True)
+
+# sort_values makes the tie order deterministic (nlargest breaks ties arbitrarily)
+raw_top = (df.sort_values(["mean_rating", "n"], ascending=False)
+             .head(15)[["title", "n", "mean_rating", "shrunk", "shrunk_rank"]])
+shrunk_top = df.nlargest(15, "shrunk")[["title", "n", "mean_rating", "shrunk", "raw_rank"]]
+
+raw_top.to_markdown("results/top15_raw.md", index=False, floatfmt=".3f", intfmt=",")
+shrunk_top.to_markdown("results/top15_shrunk.md", index=False, floatfmt=".3f", intfmt=",")
+
 #%% How many films have a perfect raw mean? 
 df.sort_values(["mean_rating", "n"], ascending=False).head(15)[cols]
 print((df.mean_rating == 5).sum())
